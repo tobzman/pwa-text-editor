@@ -7,59 +7,59 @@ module.exports = () => {
   return {
     mode: "development",
     entry: {
-      main: "../Develop/client/src/js,index.js",
-      install: "../Develop/client/src/js/install.js",
+      main: "./src/js/index.js",
+      install: "./src/js/install.js",
     },
     output: {
       filename: "[name].bundle.js",
       path: path.resolve(__dirname, "dist"),
     },
     plugins: [
-      // HTML Webpack Plugin
       new HtmlWebpackPlugin({
-        template: "./src/index.html",
-        filename: "index.html",
-        chunks: ["main"],
+        template: "./index.html",
+        title: "J.A.T.E",
       }),
-
-      // Webpack PWA Manifest Plugin
+      new InjectManifest({
+        swSrc: "./src-sw.js",
+        swDest: "src-sw.js",
+      }),
       new WebpackPwaManifest({
-        name: "Your PWA Name",
-        short_name: "PWA",
-        description: "Your PWA Description",
-        background_color: "#ffffff",
-        theme_color: "#000000",
+        fingerprints: false,
+        inject: true,
+        name: "Just Another Text Editor",
+        short_name: "J.A.T.E",
+        description: "Takes notes with JavaScript syntax highlighting!",
+        background_color: "#225ca3",
+        theme_color: "#225ca3",
+        start_url: "/",
+        publicPath: "/",
         icons: [
           {
-            src: path.resolve("./src/assets/icon.png"),
+            src: path.resolve("src/images/logo.png"),
             sizes: [96, 128, 192, 256, 384, 512],
+            destination: path.join("assets", "icons"),
           },
         ],
-      }),
-
-      // Workbox Inject Manifest Plugin for Service Worker
-      new InjectManifest({
-        swSrc: "",
-        swDest: "sw.js", // Change to your desired service worker file name
       }),
     ],
 
     module: {
       rules: [
-        // Add CSS loader rules here if needed.
         {
-          test: /\.css$/,
+          test: /\.css$/i,
           use: ["style-loader", "css-loader"],
         },
-
-        // Add Babel loader rules here if needed.
         {
-          test: /\.js$/,
+          test: /\.m?js$/,
           exclude: /node_modules/,
           use: {
             loader: "babel-loader",
             options: {
               presets: ["@babel/preset-env"],
+              plugins: [
+                "@babel/plugin-proposal-object-rest-spread",
+                "@babel/transform-runtime",
+              ],
             },
           },
         },

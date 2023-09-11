@@ -1,7 +1,7 @@
 import { openDB } from "idb";
 
-const DB_NAME = "jate";
-const STORE_NAME = "jate";
+const DB_NAME = "PWA TEXT EDITOR";
+const STORE_NAME = "PWA TEXT EDITOR";
 
 const initdb = async () => {
   return openDB(DB_NAME, 1, {
